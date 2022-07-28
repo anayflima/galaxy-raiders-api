@@ -86,8 +86,11 @@ class GameEngine(
 
   fun handleCollisions() {
     this.field.spaceObjects.forEachPair {
-        (first, second) ->
+      (first, second) ->
       if (first.impacts(second)) {
+        if (this.field.hasColisionExplosion(first, second)) {
+              this.field.generateExplosions(this.field.findColisionPoint(first, second))
+        }
         first.collideWith(second, GameEngineConfig.coefficientRestitution)
       }
     }
@@ -102,6 +105,7 @@ class GameEngine(
   fun trimSpaceObjects() {
     this.field.trimAsteroids()
     this.field.trimMissiles()
+    this.field.trimExplosions()
   }
 
   fun generateAsteroids() {
@@ -115,6 +119,7 @@ class GameEngine(
   fun renderSpaceField() {
     this.visualizer.renderSpaceField(this.field)
   }
+  
 }
 
 fun <T> List<T>.forEachPair(action: (Pair<T, T>) -> Unit) {

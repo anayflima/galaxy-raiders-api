@@ -37,9 +37,12 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
 
   var asteroids: List<Asteroid> = emptyList()
     private set
+  
+  var explosions: List<Explosion> = emptyList()
+    private set
 
   val spaceObjects: List<SpaceObject>
-    get() = listOf(this.ship) + this.missiles + this.asteroids
+    get() = listOf(this.ship) + this.missiles + this.asteroids + this.explosions
 
   fun moveShip() {
     this.ship.move(boundaryX, boundaryY)
@@ -61,6 +64,11 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
     this.asteroids += this.createAsteroidWithRandomProperties()
   }
 
+  fun generateExplosions(colisionPoint: Point2D) {
+    this.explosions += this.createExplosion(colisionPoint)
+  }
+
+
   fun trimMissiles() {
     this.missiles = this.missiles.filter {
       it.inBoundaries(this.boundaryX, this.boundaryY)
@@ -71,6 +79,34 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
     this.asteroids = this.asteroids.filter {
       it.inBoundaries(this.boundaryX, this.boundaryY)
     }
+  }
+
+  fun trimExplosions() {
+    this.explosions = this.explosions.filter {
+      it.shortensLifeSpan()
+      it.isStillAlive()
+    }
+  }
+
+  fun findColisionPoint(first: SpaceObject, second: SpaceObject): Point2D {
+    // The colision point between two objects is a
+    // line segment between the two objects's centers
+
+    val vectorOriginToFirstCenter: Vector2D = first.center.toVector()
+    val vectorOriginToSecondCenter: Vector2D = second.center.toVector()
+    val vectorFirstCenterToSecondCenter: Vector2D = vectorOriginToSecondCenter - vectorOriginToFirstCenter
+    val vectorFirstToColisionPoint: Vector2D = vectorFirstCenterToSecondCenter.unit * first.radius
+    val colisionPoint = first.center + vectorFirstToColisionPoint
+    return colisionPoint
+  }
+
+  fun hasColisionExplosion(first : SpaceObject, second : SpaceObject) : Boolean {
+    // if a colision with an asteroid happened
+
+    return first.type == "Missile" && second.type == "Asteroid" ||
+            first.type == "Asteroid" && second.type == "Missile" ||
+            first.type == "SpaceShip" && second.type == "Asteroid" ||
+            first.type == "Asteroid" && second.type == "SpaceShip"
   }
 
   private fun initializeShip(): SpaceShip {
@@ -96,6 +132,12 @@ data class SpaceField(val width: Int, val height: Int, val generator: RandomGene
       initialVelocity = defineMissileVelocity(),
       radius = SpaceFieldConfig.missileRadius,
       mass = SpaceFieldConfig.missileMass,
+    )
+  }
+
+  private fun createExplosion(colisionPoint : Point2D) : Explosion {
+    return Explosion(
+      initialPosition = colisionPoint,
     )
   }
 
