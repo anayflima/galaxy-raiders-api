@@ -3,6 +3,10 @@
 Template for the project of the course [MAC0218 - Programming Techniques II][1]
 at University of São Paulo (@USP).
 
+# Students Info
+- Ana Yoon Faria Lima (*11795273*)
+- Jessica Yumi Nakano Sato (*11795294*)
+
 # Development
 
 Galaxy Raiders is built in [Kotlin][2], a modern programming language for
