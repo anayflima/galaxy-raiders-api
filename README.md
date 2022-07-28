@@ -7,6 +7,8 @@ at University of São Paulo (@USP).
 - Ana Yoon Faria Lima (*11795273*)
 - Jessica Yumi Nakano Sato (*11795294*)
 
+Note: We started the project in the repository: https://github.com/jessica-sato, but due to changes in the original repository, we started again in this new one. That's why it seems both first and second parts were made by the same person.
+
 # Development
 
 Galaxy Raiders is built in [Kotlin][2], a modern programming language for
