@@ -15,16 +15,18 @@ object ExplosionConfig {
 class Explosion(
   initialPosition: Point2D,
 ) :
-  SpaceObject("Explosion", 'X', initialPosition, Vector2D(0.0, 0.0),
-              ExplosionConfig.explosionRadius, ExplosionConfig.explosionMass) {
-    
-    var remainingLifeTicks = ExplosionConfig.explosionLifetime
+  SpaceObject(
+    "Explosion", 'X', initialPosition, Vector2D(0.0, 0.0),
+    ExplosionConfig.explosionRadius, ExplosionConfig.explosionMass
+  ) {
 
-    fun isStillAlive() : Boolean{
-      return remainingLifeTicks > 0
-    }
-  
-    fun shortensLifeSpan() {
-      remainingLifeTicks -= 1
-    }
+  var remainingLifeTicks = ExplosionConfig.explosionLifetime
+
+  fun isStillAlive(): Boolean {
+    return remainingLifeTicks > 0
   }
+
+  fun shortensLifeSpan() {
+    remainingLifeTicks -= 1
+  }
+}
